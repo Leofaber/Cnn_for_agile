@@ -1,6 +1,5 @@
 import numpy as np
 from astropy.io import fits
-import glob
 import sys
 import os
 from random import shuffle
