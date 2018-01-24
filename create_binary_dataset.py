@@ -14,17 +14,14 @@ title =     """
 
 
 
-
-
-
 def get_label_from_filename(filename):
-    if 'B' in filename:
-        return True
+    if 'S' in filename:
+        return 1
     else:
-        return False
+        return 0
 
 
-def create_batch_files(number_of_train_examples, number_of_test_examples, batch_size = 2000, mode = 'TRAIN'):
+def create_binary_files(number_of_train_examples, number_of_test_examples, batch_size = 2000, mode = 'TRAIN'):
 
 
     sample_offset = 0
@@ -45,8 +42,8 @@ def create_batch_files(number_of_train_examples, number_of_test_examples, batch_
         labels_name = 'test_set/'+test_labels_name
 
 
-    labels = np.zeros(batch_size, dtype=bool)
     images = np.zeros(tensors_shape, dtype=int)
+    labels = np.zeros(batch_size, dtype=int)
 
     batch_limit = 0
     count = -1
@@ -55,7 +52,7 @@ def create_batch_files(number_of_train_examples, number_of_test_examples, batch_
         sample_name = samples[ sample_offset + i ]
 
         # Aggiungere le labels
-        np.append(labels, get_label_from_filename( sample_name ) )
+        labels[batch_limit] = get_label_from_filename( sample_name )
 
         # Aggiungere le matrici
         hdulist = fits.open( dataset_path + sample_name )
@@ -72,7 +69,9 @@ def create_batch_files(number_of_train_examples, number_of_test_examples, batch_
             batch_labels_name = labels_name+str(count)+'.npy'
             np.save(batch_images_name, images)
             np.save(batch_labels_name, labels)
-            labels = np.zeros(batch_size, dtype=bool)
+
+
+            labels = np.zeros(batch_size, dtype=int)
             images = np.zeros(tensors_shape, dtype=int)
             print 'Batch',batch_images_name,'and',batch_labels_name,'completed and saved.'
         else:
@@ -119,6 +118,8 @@ for i in range(tmp):
 """
     samples = [B,S,B,S, ....] 400.000
 """
+for i in range(10):
+    print samples[i]
 
 dataset_size = len(samples)
 
@@ -134,6 +135,7 @@ print 'Number of samples for testing:', test_set_samples_number, '(',test_set_sa
 
 # Compute rows and cols of images and Tensors Numpy Shape
 hdulist = fits.open(dataset_path+samples[0])
+labels_vector_shape = 1, batch_size
 tensors_shape = batch_size, hdulist[0].data.shape[0], hdulist[0].data.shape[1]
 print "Tensors shape:", tensors_shape
 
@@ -150,5 +152,5 @@ print test_set_samples_number/ (2*batch_size)," test batch files will be created
 
 raw_input("Press any key to start..")
 
-create_batch_files( training_set_samples_number/2, test_set_samples_number/2, batch_size, 'TRAIN')
-create_batch_files( test_set_samples_number/2, test_set_samples_number/2, batch_size, 'TEST')
+create_binary_files( training_set_samples_number/2, test_set_samples_number/2, batch_size, 'TRAIN')
+create_binary_files( test_set_samples_number/2, test_set_samples_number/2, batch_size, 'TEST')
