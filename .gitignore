@@ -2,6 +2,14 @@
 dataset/
 training_set/
 test_set/
+batch_dataset/
+batch_smoothed_dataset/
+cnn_learned_model_1024
+cnn_learned_model_256
+dataset_smooth/
+MNIST_data
+temp_agile_cnn_models
+
 
 #Files
 *.pyc
