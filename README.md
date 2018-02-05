@@ -5,7 +5,8 @@
 
 * Avviare il file
     * python create_batch_dataset.py
-        * Divide le immagini (100x100) del dataset in batch numpy in codifica binaria. Ogni batch contiene 10000 immagini. Crea inoltre anche i batch delle corrispondenti labels.
+        * Riduce la dimensione delle immagini (100x100) -> (96x96). 
+        * Divide le immagini del dataset in batch numpy in codifica binaria. Ogni batch contiene 10000 immagini. Crea inoltre anche i batch delle corrispondenti labels.
         * Ogni batch è quindi un tensore (10000, 100, 100).
 
 
